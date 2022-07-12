@@ -120,7 +120,7 @@ class System:
             lambda x, c0, c2, c3: c0 + c2*x**2 + c3*x**3,
             p0=p0, use_c=use_c
         )
-        return -1/pars[0], 2*pars[2]
+        return -1/pars[0], 2*pars[1]
     
     
 

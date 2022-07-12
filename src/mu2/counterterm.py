@@ -39,7 +39,7 @@ class Counterterm:
 
         
 class LocalCounterterm(Counterterm):
-    def __init__(self, lo_term, nlo_term, rmesh: Mesh, qmesh, R, ell):
+    def __init__(self, lo_term, nlo_term, rmesh: Mesh, qmesh: Mesh, R, ell):
         super().__init__(qmesh, R, ell, nonloc=False)
         self.rmesh = rmesh
         self.x_tilde_lo = ft_matrix_gen(lambda r: lo_term(r, R),
@@ -57,7 +57,7 @@ class NonlocalCounterterm(Counterterm):
         super().__init__(qmesh, R, ell, nonloc=True)
         self.lo_term = lo_term # V(p, k, Lambda)
         self.nlo_term = nlo_term # V(p, k, Lambda)
-        self.nonloc_reg = nonloc_reg # V(p, k, Lambda
+        self.nonloc_reg = nonloc_reg # V(p, k, Lambda)
 
         self.x_reg = np.array(
             [[self.nonloc_reg(p, k, self.Lambda) for p in self.qmesh.nodes] for
