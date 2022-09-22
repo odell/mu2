@@ -11,6 +11,13 @@ def kd(i, j):
     '''
     return 1.0 if i == j else 0.0
 
+def mesh(a, b, n):
+    x, w = roots_legendre(n)
+    x *= (b - a)/2
+    x += (b + a)/2
+    w *= (b - a)/2
+    return x, w
+
 
 def log_mesh(a, b, n):
     '''
@@ -27,11 +34,15 @@ def log_mesh(a, b, n):
 
 
 class Mesh:
-    def __init__(self, a, b, n):
+    def __init__(self, a, b, n, log=True):
         self.lower_bound = a
         self.upper_bound = b
         self.size = n
-        self.nodes, self.weights = log_mesh(self.lower_bound, self.upper_bound, self.size)
+        if log:
+            self.nodes, self.weights = log_mesh(self.lower_bound, self.upper_bound, self.size)
+        else:
+            self.nodes, self.weights = mesh(self.lower_bound, self.upper_bound,
+                    self.n)
 
 
 def ft_matrix_gen(pot, l, lp, p, r, wr):
