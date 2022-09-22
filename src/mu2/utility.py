@@ -42,7 +42,7 @@ class Mesh:
             self.nodes, self.weights = log_mesh(self.lower_bound, self.upper_bound, self.size)
         else:
             self.nodes, self.weights = mesh(self.lower_bound, self.upper_bound,
-                    self.n)
+                    self.size)
 
 
 def ft_matrix_gen(pot, l, lp, p, r, wr):
