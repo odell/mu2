@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mu2"
-version = "1.0"
+version = "1.1"
 authors = [
   {name="Daniel Odell", email="dodell@ohio.edo"}
 ]
