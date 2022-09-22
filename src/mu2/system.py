@@ -22,6 +22,7 @@ class System:
         self.ell = ell
         self.q = self.interaction.counterterm.qmesh.nodes
         self.wq = self.interaction.counterterm.qmesh.weights
+        self.qmax = self.interaction.counterterm.qmesh.upper_bound
         self.v_tilde = self.interaction.matrix_elements(self.interaction.counterterm.qmesh, self.ell, self.ell)
     
     
@@ -32,7 +33,7 @@ class System:
         xterm = self.interaction.counterterm.gen(glo, gnlo)
         v = self.v_tilde + xterm
         return np.array(
-            [scatter.phase_shift(ki, v, self.q, self.wq, 10*2/self.r_c,
+            [scatter.phase_shift(ki, v, self.q, self.wq, self.qmax,
                 2*self.mu, degrees=False) for ki in ks]
         )
 
@@ -57,7 +58,8 @@ class System:
             return self.kcotd_gen_fast(ks, glo, gnlo)
         else:
             return np.array(
-                [ki**(2*self.ell)*scatter.kcotdelta(ki, v, self.q, self.wq, 10*2/self.r_c, 2*self.mu) for ki in ks]
+                [ki**(2*self.ell)*scatter.kcotdelta(ki, v, self.q, self.wq,
+                    self.qmax, 2*self.mu) for ki in ks]
             )
     
     
@@ -68,7 +70,7 @@ class System:
         xterm = self.interaction.counterterm.gen(glo, gnlo)
         v = self.v_tilde + xterm
         print(p)
-        scatter_temp = scatter.kcotdelta(p, v, self.q, self.wq, 10*2/self.r_c, 2*self.mu)
+        scatter_temp = scatter.kcotdelta(p, v, self.q, self.wq, self.qmax, 2*self.mu)
         return p**(2*self.ell)*scatter_temp
     
     
@@ -80,7 +82,8 @@ class System:
         xterm = self.interaction.counterterm.gen(glo, gnlo)
         v = self.v_tilde + xterm
         return np.array(
-            [ki**(2*self.ell)*scatter.kcotdelta(ki, v, self.q, self.wq, 10*2/self.r_c, 2*self.mu) for ki in ks]
+            [ki**(2*self.ell)*scatter.kcotdelta(ki, v, self.q, self.wq,
+                self.qmax, 2*self.mu) for ki in ks]
         )
     
     
@@ -93,7 +96,7 @@ class System:
         xterm = self.interaction.counterterm.gen(glo, gnlo)
         v = self.v_tilde + xterm
         return np.array(
-            [cscatter.kcotdelta_py(ki, v, self.q, self.wq, 10*2/self.r_c, self.ell, 2*self.mu) for ki in ks]
+            [cscatter.kcotdelta_py(ki, v, self.q, self.wq, self.qmax, self.ell, 2*self.mu) for ki in ks]
         )
     
     
