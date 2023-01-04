@@ -25,7 +25,7 @@ class Interaction:
     def matrix_elements(self, qmesh, l, lp):
         v =  ft_matrix_gen(self.long_rang_potential, l, lp, qmesh.nodes,
             self.rmesh.nodes, self.rmesh.weights)
-        if self.counterterm.nonloc:
+        if self.scheme == 'nonlocal':
             v *= self.counterterm.x_reg
         return v
         
