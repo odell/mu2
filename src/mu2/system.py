@@ -65,7 +65,7 @@ class System:
     
     def kcotd(self, p, glo, gnlo):    
         '''
-        Calculates k^(2l+1) cot(delta) as at a specificied momentum, p.
+        Calculates k^(2l+1) cot(delta) as at a specified momentum, p.
         '''
         xterm = self.interaction.counterterm.gen(glo, gnlo)
         v = self.v_tilde + xterm
