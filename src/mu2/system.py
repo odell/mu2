@@ -86,6 +86,12 @@ class System:
                 self.qmax, 2*self.mu) for ki in ks]
         )
     
+
+    def kcotd_gen_pert1(self, ks, glo, gnlo):
+        v0 = self.v_tilde + self.interaction.counterterm.gen(glo, 0)
+        v1 = self.interaction.counterterm.gen(0, gnlo)
+        return np.array([scatter.kcotdelta_pert1(k, v0, v1, self.q, self.wq, self.qmax, 2*self.mu) for k in ks])
+    
     
     def kcotd_gen_fast(self, ks, glo, gnlo):    
         '''
