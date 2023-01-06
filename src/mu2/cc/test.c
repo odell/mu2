@@ -1,45 +1,59 @@
 #include <stdio.h>
-#include "scatter.h"
+#include "scatter_pert.h"
 
-int main(void) {
+int main(int argc, char** argv) {
 
-    int i, n=200, m=30;
-    double R=5.5;
-    double qmax=10*2/R;
-    double mass=0.12400095845605276;
+    int n = 200;
+    double qmax = 7.218587863749154;
+    double mass = 0.08251315259652389;
+    double beta6 = 5.54125;
+    double kmin = 0.01/beta6;
+    double kmax = 0.3/beta6;
+    int m = 30;
+    double dk = (kmax - kmin) / (m - 1.0);
 
     FILE *fp;
     double k[m];
     double q[n];
     double wq[n];
-    double v[n*n];
+    double v0[n*n];
+    double v1[n*n];
 
-    fp = fopen("../datfiles/k.txt", "r");
-    for (i = 0; i < m; i++) {
-        fscanf(fp, "%lf\n", &k[i]);
-    }
-    fclose(fp);
+    for (int i = 0; i < m; i++)
+        k[i] = kmin + i*dk;
 
-    fp = fopen("../datfiles/q.txt", "r");
-    for (i = 0; i < n; i++) {
+    fp = fopen("/Users/danielodell/vdw-nlo/datfiles/q.txt", "r");
+    for (int i = 0; i < n; i++) {
         fscanf(fp, "%lf\n", &q[i]);
     }
     fclose(fp);
 
-    fp = fopen("../datfiles/wq.txt", "r");
+    fp = fopen("/Users/danielodell/vdw-nlo/datfiles/wq.txt", "r");
     for (int i = 0; i < n; i++) {
         fscanf(fp, "%lf\n", &wq[i]);
     }
     fclose(fp);
 
-    fp = fopen("../datfiles/v_tilde.txt", "r");
+    fp = fopen("/Users/danielodell/vdw-nlo/datfiles/v0.txt", "r");
     for (int i = 0; i < n*n; i++) {
-        fscanf(fp, "%lf\n", &v[i]);
+        fscanf(fp, "%lf\n", &v0[i]);
     }
     fclose(fp);
 
-    for (i = 0; i < m; i++) {
-        printf("%.8lf\n", k3cotdelta(k[i], v, q, wq, n, qmax, mass));
+    fp = fopen("/Users/danielodell/vdw-nlo/datfiles/v1.txt", "r");
+    for (int i = 0; i < n*n; i++) {
+        fscanf(fp, "%lf\n", &v1[i]);
+    }
+    fclose(fp);
+
+    // driving term
+
+    for (int i = 0; i < m; i++) {
+        gsl_complex t = t_on_shell_pert1(k[i], v0, v1, q, wq, n, qmax, mass);
+        // printf("%.8lf %.8lf\n", GSL_REAL(t), GSL_IMAG(t));
+        double kcd = kcotdelta_pert1(k[i], v0, v1, q, wq, n, qmax, 0, mass);
+        printf("%.8e  %.8e  %.8e\n", GSL_REAL(t), GSL_IMAG(t), kcd);
     }
     return 0;
+
 }

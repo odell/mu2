@@ -69,7 +69,6 @@ class System:
         '''
         xterm = self.interaction.counterterm.gen(glo, gnlo)
         v = self.v_tilde + xterm
-        print(p)
         scatter_temp = scatter.kcotdelta(p, v, self.q, self.wq, self.qmax, 2*self.mu)
         return p**(2*self.ell)*scatter_temp
     
@@ -103,6 +102,19 @@ class System:
         v = self.v_tilde + xterm
         return np.array(
             [cscatter.kcotdelta_py(ki, v, self.q, self.wq, self.qmax, self.ell, 2*self.mu) for ki in ks]
+        )
+    
+
+    def kcotd_gen_pert1_fast(self, ks, glo, gnlo):    
+        '''
+        Calculates k^(2l+1) cot(delta) as function of ks (array) so that we can
+        curve_fit the phaseshifts. Uses the C code inside the cc dir. Needs to
+        be compiled (try `make libs` inside cc) to a shared library first.
+        '''
+        v0 = self.v_tilde + self.interaction.counterterm.gen(glo, 0)
+        v1 = self.interaction.counterterm.gen(0, gnlo)
+        return np.array(
+            [cscatter.kcotdelta_pert1_py(ki, v0, v1, self.q, self.wq, self.qmax, self.ell, 2*self.mu) for ki in ks]
         )
     
     
