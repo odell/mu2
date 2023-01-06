@@ -118,6 +118,24 @@ class System:
         )
     
     
+    def a0_and_r0_pert1_fast(self, glo, gnlo, ks, p0=None, return_sigma=False):
+        '''
+        Returns a_0 and r_0 after fitting the effective range parameters.
+        '''
+        assert self.ell == 0, 'This is not an S-wave (l = 0) system.'
+        kcds = self.kcotd_gen_pert1_fast(ks, glo, gnlo)
+        result = optimize.curve_fit(
+            lambda x, c0, c2, c3: c0 + c2*x**2 + c3*x**3,
+            ks, kcds, p0=p0, maxfev=20000
+        )
+        pars, cov = result
+        sig = np.sqrt(np.diag(cov))
+        if return_sigma:
+            return -1/pars[0], 2*pars[1], sig
+        else:
+            return -1/pars[0], 2*pars[1]
+    
+    
     def effective_range_parameters(self, glo, gnlo, ks, expansion, p0=None, use_c=False):
         '''
         Returns the effective range parameters for partial wave, ell, at given
@@ -144,7 +162,6 @@ class System:
         return -1/pars[0], 2*pars[1]
     
     
-
     def a1_and_r1(self, glo, gnlo, ks, p0=None, use_c=False):
         '''
         Returns a_1 and r_1 after fitting the effective range parameters.
