@@ -116,6 +116,23 @@ gsl_complex t_on_shell_pert1(
     return result;
 }
 
+void t_pert1_sum(
+    double* t_real, // Re(t_0 + t_1)
+    double* t_imag, // Im(t_0 + t_1)
+    double k, // scattering momentum
+    double* v0, // NLO interaction (exclusive)
+    double* v1, // NLO interaction (exclusive)
+    double* p, // momentum nodes
+    double* wp, // momentum weights
+    int np, // number of momentum nodes
+    double qmax,
+    double mass
+) {
+  gsl_complex sum = t_on_shell_pert1(k, v0, v1, p, wp, np, qmax, mass);
+  *t_real = GSL_REAL(sum);
+  *t_imag = GSL_IMAG(sum);
+}
+
 double kcotdelta_pert1(
     double k,
     double* v0, // LO interaction

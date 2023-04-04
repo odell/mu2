@@ -35,7 +35,19 @@ gsl_complex t_on_shell_pert1(
     int np, // number of momentum nodes
     double qmax,
     double mass
+);
 
+void t_pert1_sum(
+    double* t_real, // Re(t_0 + t_1)
+    double* t_imag, // Im(t_0 + t_1)
+    double k, // scattering momentum
+    double* v0, // NLO interaction (exclusive)
+    double* v1, // NLO interaction (exclusive)
+    double* p, // momentum nodes
+    double* wp, // momentum weights
+    int np, // number of momentum nodes
+    double qmax,
+    double mass
 );
 
 double kcotdelta_pert1(
