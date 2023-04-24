@@ -80,3 +80,30 @@ def t_pert1_sum_py(k, v0, v1, q, wq, qmax, mass):
         wq.ctypes.data_as(POINTER(c_double)),
         q.size, qmax, mass)
     return tr[0], ti[0]
+
+
+tos = LIB.t_pert1_sum
+tos.argtypes = (
+    POINTER(c_double),
+    POINTER(c_double),
+    c_double,
+    POINTER(c_double),
+    POINTER(c_double),
+    POINTER(c_double),
+    POINTER(c_double),
+    c_int,
+    c_double,
+    c_double
+)
+def t_on_shell_py(k, v0, v1, q, wq, qmax, mass):
+    tr = np.zeros(1)
+    ti = np.zeros(1)
+    tos(tr.ctypes.data_as(POINTER(c_double)),
+        ti.ctypes.data_as(POINTER(c_double)),
+        k,
+        v0.ctypes.data_as(POINTER(c_double)),
+        v1.ctypes.data_as(POINTER(c_double)),
+        q.ctypes.data_as(POINTER(c_double)),
+        wq.ctypes.data_as(POINTER(c_double)),
+        q.size, qmax, mass)
+    return tr[0] + 1j*ti[0]
