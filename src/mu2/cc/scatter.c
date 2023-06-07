@@ -130,6 +130,22 @@ gsl_complex t_on_shell(
   return result;
 }
 
+void t_on_shell_ref(
+    double* tr,
+    double* ti,
+    double q0,
+    double* v_matrix,
+    double* p,
+    double* wp,
+    int np,
+    double qmax,
+    double mass
+) {
+  gsl_complex t = t_on_shell(q0, v_matrix, p, wp, np, qmax, mass);
+  *tr = GSL_REAL(t);
+  *ti = GSL_IMAG(t);
+}
+
 double kcotdelta(
     double k,
     double* v_matrix,

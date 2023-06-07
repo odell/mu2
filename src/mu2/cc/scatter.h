@@ -38,6 +38,18 @@ gsl_complex t_on_shell(
     double mass
 );
 
+void t_on_shell_ref(
+    double* tr,
+    double* ti,
+    double q0,
+    double* v_matrix,
+    double* p,
+    double* wp,
+    int np,
+    double qmax,
+    double mass
+);
+
 double kcotdelta(
     double k,
     double* v_matrix,

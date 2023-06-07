@@ -101,6 +101,21 @@ class System:
         return np.array([scatter.kcotdelta_pert1a(k, v0, v1, self.q, self.wq, self.qmax, 2*self.mu) for k in ks])
     
     
+    def T_gen_fast(self, ks, glo, gnlo):    
+        '''
+        Calculates T (see Thompson&Nunes Table  3.1) as function of ks (array) so that we can
+        curve_fit the phaseshifts. Uses the C code inside the cc dir. Needs to
+        be compiled (try `make libs` inside cc) to a shared library first.
+        '''
+        xterm = self.interaction.counterterm.gen(glo, gnlo)
+        v = self.v_tilde + xterm
+        return np.array(
+            [-self.mu*ki*np.pi*cscatter.t_on_shell_py(ki, v, self.q, self.wq, self.qmax, 2*self.mu)
+                for ki in ks],
+            dtype=np.complex128
+        )
+
+
     def kcotd_gen_fast(self, ks, glo, gnlo):    
         '''
         Calculates k^(2l+1) cot(delta) as function of ks (array) so that we can
